@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CHAITANYA Chatbot</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background: #0f0f1a;
+            color: white;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 800px;
+            height: 90vh;
+            display: flex;
+            flex-direction: column;
+            background: #1a1a2e;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 0 40px rgba(99, 102, 241, 0.3);
+        }
+
+        .header {
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            padding: 20px;
+            text-align: center;
+        }
+
+        .header h1 { font-size: 24px; }
+        .header p { font-size: 13px; opacity: 0.8; margin-top: 4px; }
+
+        .chat-box {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .chat-box::-webkit-scrollbar { width: 5px; }
+        .chat-box::-webkit-scrollbar-thumb {
+            background: #6366f1;
+            border-radius: 10px;
+        }
+
+        .message {
+            max-width: 75%;
+            padding: 12px 18px;
+            border-radius: 18px;
+            font-size: 15px;
+            line-height: 1.5;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .user-message {
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            align-self: flex-end;
+            border-bottom-right-radius: 4px;
+        }
+
+        .bot-message {
+            background: #2d2d44;
+            align-self: flex-start;
+            border-bottom-left-radius: 4px;
+        }
+
+        .bot-message .name {
+            font-size: 11px;
+            color: #8b5cf6;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        .typing {
+            background: #2d2d44;
+            align-self: flex-start;
+            padding: 12px 18px;
+            border-radius: 18px;
+        }
+
+        .typing span {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            background: #8b5cf6;
+            border-radius: 50%;
+            margin: 0 2px;
+            animation: bounce 1.2s infinite;
+        }
+
+        .typing span:nth-child(2) { animation-delay: 0.2s; }
+        .typing span:nth-child(3) { animation-delay: 0.4s; }
+
+        @keyframes bounce {
+            0%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-8px); }
+        }
+
+        .input-area {
+            padding: 20px;
+            background: #16213e;
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .input-area input {
+            flex: 1;
+            padding: 14px 20px;
+            border-radius: 30px;
+            border: 2px solid #2d2d44;
+            background: #1a1a2e;
+            color: white;
+            font-size: 15px;
+            outline: none;
+            transition: border 0.3s;
+        }
+
+        .input-area input:focus { border-color: #6366f1; }
+        .input-area input::placeholder { color: #555; }
+
+        .send-btn {
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            color: white;
+            border: none;
+            padding: 14px 24px;
+            border-radius: 30px;
+            font-size: 15px;
+            cursor: pointer;
+            transition: opacity 0.3s;
+        }
+
+        .send-btn:hover { opacity: 0.85; }
+        .send-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+        .clear-btn {
+            background: #2d2d44;
+            color: #aaa;
+            border: none;
+            padding: 14px 18px;
+            border-radius: 30px;
+            font-size: 13px;
+            cursor: pointer;
+        }
+
+        .clear-btn:hover { background: #3d3d5e; color: white; }
+
+        .welcome {
+            text-align: center;
+            color: #555;
+            margin: auto;
+        }
+
+        .welcome h2 { font-size: 40px; margin-bottom: 10px; }
+        .welcome p { font-size: 15px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🤖 CHAITANYA'S AI</h1>
+            <p>built by chaitanya x / zinnia</p>
+        </div>
+
+        <div class="chat-box" id="chatBox">
+            <div class="welcome" id="welcome">
+                <h2>🤖</h2>
+                <p>Ask me anything!</p>
+            </div>
+        </div>
+
+        <div class="input-area">
+            <input
+                type="text"
+                id="userInput"
+                placeholder="Type your message..."
+                onkeypress="handleKey(event)"
+            />
+            <button class="clear-btn" onclick="clearChat()">🗑️ Clear</button>
+            <button class="send-btn" id="sendBtn" onclick="sendMessage()">Send ➤</button>
+        </div>
+    </div>
+
+    <script>
+        const userId = "user_" + Math.random().toString(36).substr(2, 9);
+        const chatBox = document.getElementById("chatBox");
+        const userInput = document.getElementById("userInput");
+        const sendBtn = document.getElementById("sendBtn");
+
+        function handleKey(event) {
+            if (event.key === "Enter") sendMessage();
+        }
+
+        function addMessage(text, isUser) {
+            const welcome = document.getElementById("welcome");
+            if (welcome) welcome.remove();
+
+            const div = document.createElement("div");
+            div.classList.add("message");
+
+            if (isUser) {
+                div.classList.add("user-message");
+                div.textContent = text;
+            } else {
+                div.classList.add("bot-message");
+                div.innerHTML = `<div class="name">🤖 AI Chatbot</div>${text}`;
+            }
+
+            chatBox.appendChild(div);
+            chatBox.scrollTop = chatBox.scrollHeight;
+        }
+
+        function showTyping() {
+            const div = document.createElement("div");
+            div.classList.add("typing");
+            div.id = "typing";
+            div.innerHTML = `<span></span><span></span><span></span>`;
+            chatBox.appendChild(div);
+            chatBox.scrollTop = chatBox.scrollHeight;
+        }
+
+        function removeTyping() {
+            const typing = document.getElementById("typing");
+            if (typing) typing.remove();
+        }
+
+        async function sendMessage() {
+            const message = userInput.value.trim();
+            if (!message) return;
+
+            addMessage(message, true);
+            userInput.value = "";
+            sendBtn.disabled = true;
+            showTyping();
+
+            try {
+                const response = await fetch("/chat", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                        user_id: userId,
+                        message: message
+                    })
+                });
+
+                const data = await response.json();
+                removeTyping();
+                addMessage(data.reply, false);
+
+            } catch (error) {
+                removeTyping();
+                addMessage("Sorry something went wrong! Please try again.", false);
+            }
+
+            sendBtn.disabled = false;
+            userInput.focus();
+        }
+
+        async function clearChat() {
+            await fetch("/clear", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ user_id: userId })
+            });
+
+            chatBox.innerHTML = `
+                <div class="welcome" id="welcome">
+                    <h2>🤖</h2>
+                    <p>Ask me anything!</p>
+                </div>`;
+        }
+    </script>
+</body>
+</html>
