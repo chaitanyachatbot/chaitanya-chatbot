@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CHAITANYA Chatbot</title>
+    <title>CHAITANYA 🤖🧠🇦🇮👾</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/9.1.6/marked.min.js"></script>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
@@ -13,31 +14,130 @@
             color: white;
             height: 100vh;
             display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
+            overflow: hidden;
         }
 
-        .container {
-            width: 100%;
-            max-width: 800px;
-            height: 90vh;
+        /* SIDEBAR */
+        .sidebar {
+            width: 260px;
+            background: #111127;
             display: flex;
             flex-direction: column;
-            background: #1a1a2e;
-            border-radius: 20px;
-            overflow: hidden;
-            box-shadow: 0 0 40px rgba(99, 102, 241, 0.3);
+            border-right: 1px solid #2d2d44;
+            height: 100vh;
         }
 
-        .header {
-            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+        .sidebar-header {
             padding: 20px;
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
             text-align: center;
         }
 
-        .header h1 { font-size: 24px; }
-        .header p { font-size: 13px; opacity: 0.8; margin-top: 4px; }
+        .sidebar-header h2 { font-size: 18px; }
+        .sidebar-header p { font-size: 11px; opacity: 0.8; margin-top: 3px; }
+
+        .new-chat-btn {
+            margin: 15px;
+            padding: 12px;
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            border: none;
+            border-radius: 10px;
+            color: white;
+            font-size: 14px;
+            cursor: pointer;
+            width: calc(100% - 30px);
+            transition: opacity 0.3s;
+        }
+
+        .new-chat-btn:hover { opacity: 0.85; }
+
+        .chat-list {
+            flex: 1;
+            overflow-y: auto;
+            padding: 5px 10px;
+        }
+
+        .chat-list::-webkit-scrollbar { width: 4px; }
+        .chat-list::-webkit-scrollbar-thumb {
+            background: #6366f1;
+            border-radius: 10px;
+        }
+
+        .chat-item {
+            padding: 10px 12px;
+            border-radius: 10px;
+            cursor: pointer;
+            margin-bottom: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            transition: background 0.2s;
+            border: 1px solid transparent;
+        }
+
+        .chat-item:hover { background: #1e1e3a; }
+        .chat-item.active {
+            background: #1e1e3a;
+            border-color: #6366f1;
+        }
+
+        .chat-item-info { flex: 1; overflow: hidden; }
+
+        .chat-item-name {
+            font-size: 13px;
+            font-weight: 600;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .chat-item-meta {
+            font-size: 10px;
+            color: #666;
+            margin-top: 2px;
+        }
+
+        .chat-item-icons { display: flex; gap: 5px; align-items: center; }
+        .lock-icon { font-size: 11px; color: #8b5cf6; }
+
+        .delete-btn {
+            background: none;
+            border: none;
+            color: #ff4444;
+            cursor: pointer;
+            font-size: 13px;
+            opacity: 0;
+            transition: opacity 0.2s;
+            padding: 2px 5px;
+            border-radius: 5px;
+        }
+
+        .chat-item:hover .delete-btn { opacity: 1; }
+        .delete-btn:hover { background: rgba(255,68,68,0.1); }
+
+        .no-chats {
+            text-align: center;
+            color: #444;
+            font-size: 13px;
+            padding: 30px 10px;
+        }
+
+        /* MAIN AREA */
+        .main {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+        }
+
+        .chat-header {
+            padding: 16px 24px;
+            background: #1a1a2e;
+            border-bottom: 1px solid #2d2d44;
+        }
+
+        .chat-header h3 { font-size: 16px; }
+        .chat-header span { font-size: 11px; color: #666; }
 
         .chat-box {
             flex: 1;
@@ -59,7 +159,7 @@
             padding: 12px 18px;
             border-radius: 18px;
             font-size: 15px;
-            line-height: 1.5;
+            line-height: 1.6;
             animation: fadeIn 0.3s ease;
         }
 
@@ -78,14 +178,85 @@
             background: #2d2d44;
             align-self: flex-start;
             border-bottom-left-radius: 4px;
+            max-width: 85%;
         }
 
         .bot-message .name {
             font-size: 11px;
             color: #8b5cf6;
-            margin-bottom: 5px;
+            margin-bottom: 8px;
             font-weight: bold;
         }
+
+        /* Markdown styles */
+        .bot-message p { margin-bottom: 8px; }
+        .bot-message p:last-child { margin-bottom: 0; }
+        .bot-message h1, .bot-message h2, .bot-message h3 {
+            color: #a78bfa;
+            margin: 12px 0 6px 0;
+        }
+        .bot-message h1 { font-size: 18px; }
+        .bot-message h2 { font-size: 16px; }
+        .bot-message h3 { font-size: 14px; }
+        .bot-message ul, .bot-message ol {
+            padding-left: 20px;
+            margin-bottom: 8px;
+        }
+        .bot-message li { margin-bottom: 4px; }
+        .bot-message strong { color: #c4b5fd; }
+        .bot-message em { color: #d4b8ff; }
+        .bot-message code {
+            background: #1a1a2e;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 13px;
+            color: #a78bfa;
+            font-family: monospace;
+        }
+        .bot-message pre {
+            background: #1a1a2e;
+            padding: 12px;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 8px 0;
+            border: 1px solid #3d3d5e;
+        }
+        .bot-message pre code {
+            background: none;
+            padding: 0;
+            color: #e2e8f0;
+        }
+        .bot-message blockquote {
+            border-left: 3px solid #6366f1;
+            padding-left: 12px;
+            color: #aaa;
+            margin: 8px 0;
+            font-style: italic;
+        }
+        .bot-message a { color: #818cf8; }
+        .bot-message hr {
+            border: none;
+            border-top: 1px solid #3d3d5e;
+            margin: 10px 0;
+        }
+        .bot-message table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 8px 0;
+            font-size: 13px;
+        }
+        .bot-message th {
+            background: #1a1a2e;
+            padding: 8px;
+            text-align: left;
+            color: #a78bfa;
+            border: 1px solid #3d3d5e;
+        }
+        .bot-message td {
+            padding: 8px;
+            border: 1px solid #3d3d5e;
+        }
+        .bot-message tr:nth-child(even) { background: #1e1e3a; }
 
         .typing {
             background: #2d2d44;
@@ -96,8 +267,7 @@
 
         .typing span {
             display: inline-block;
-            width: 8px;
-            height: 8px;
+            width: 8px; height: 8px;
             background: #8b5cf6;
             border-radius: 50%;
             margin: 0 2px;
@@ -134,6 +304,7 @@
 
         .input-area input:focus { border-color: #6366f1; }
         .input-area input::placeholder { color: #555; }
+        .input-area input:disabled { opacity: 0.5; }
 
         .send-btn {
             background: linear-gradient(135deg, #6366f1, #8b5cf6);
@@ -149,18 +320,6 @@
         .send-btn:hover { opacity: 0.85; }
         .send-btn:disabled { opacity: 0.5; cursor: not-allowed; }
 
-        .clear-btn {
-            background: #2d2d44;
-            color: #aaa;
-            border: none;
-            padding: 14px 18px;
-            border-radius: 30px;
-            font-size: 13px;
-            cursor: pointer;
-        }
-
-        .clear-btn:hover { background: #3d3d5e; color: white; }
-
         .welcome {
             text-align: center;
             color: #555;
@@ -169,19 +328,135 @@
 
         .welcome h2 { font-size: 40px; margin-bottom: 10px; }
         .welcome p { font-size: 15px; }
+
+        /* MODALS */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(0,0,0,0.7);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-overlay.show { display: flex; }
+
+        .modal {
+            background: #1a1a2e;
+            border-radius: 16px;
+            padding: 30px;
+            width: 340px;
+            border: 1px solid #2d2d44;
+            box-shadow: 0 0 40px rgba(99,102,241,0.3);
+        }
+
+        .modal h3 {
+            margin-bottom: 20px;
+            font-size: 18px;
+            color: #8b5cf6;
+        }
+
+        .modal input {
+            width: 100%;
+            padding: 12px 16px;
+            border-radius: 10px;
+            border: 2px solid #2d2d44;
+            background: #0f0f1a;
+            color: white;
+            font-size: 14px;
+            outline: none;
+            margin-bottom: 12px;
+            transition: border 0.3s;
+        }
+
+        .modal input:focus { border-color: #6366f1; }
+
+        .modal-toggle {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 16px;
+            font-size: 14px;
+            color: #aaa;
+            cursor: pointer;
+        }
+
+        .modal-toggle input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+            margin: 0;
+            accent-color: #6366f1;
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 5px;
+        }
+
+        .modal-btn {
+            flex: 1;
+            padding: 12px;
+            border-radius: 10px;
+            border: none;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            transition: opacity 0.3s;
+        }
+
+        .modal-btn:hover { opacity: 0.85; }
+
+        .btn-confirm {
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            color: white;
+        }
+
+        .btn-cancel {
+            background: #2d2d44;
+            color: #aaa;
+        }
+
+        .error-text {
+            color: #ff4444;
+            font-size: 12px;
+            margin-bottom: 10px;
+            display: none;
+        }
+
+        .private-password-field { display: none; }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <h1>🤖 CHAITANYA'S AI</h1>
-            <p>built by chaitanya x / zinnia</p>
+
+    <!-- SIDEBAR -->
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <h2>🤖🧠🇦🇮👾 CHAITANYA</h2>
+            <p>created by crn</p>
+        </div>
+        <button class="new-chat-btn" onclick="openNewChatModal()">
+            ➕ New Chat
+        </button>
+        <div class="chat-list" id="chatList">
+            <div class="no-chats">No chats yet!<br>Click New Chat to start</div>
+        </div>
+    </div>
+
+    <!-- MAIN AREA -->
+    <div class="main">
+        <div class="chat-header">
+            <h3 id="currentChatName">Select a chat</h3>
+            <span id="currentChatMeta">No chat selected</span>
         </div>
 
         <div class="chat-box" id="chatBox">
             <div class="welcome" id="welcome">
                 <h2>🤖</h2>
-                <p>Ask me anything!</p>
+                <p>Create a new chat to start talking!</p>
             </div>
         </div>
 
@@ -189,28 +464,267 @@
             <input
                 type="text"
                 id="userInput"
-                placeholder="Type your message..."
+                placeholder="Select or create a chat first..."
                 onkeypress="handleKey(event)"
+                disabled
             />
-            <button class="clear-btn" onclick="clearChat()">🗑️ Clear</button>
-            <button class="send-btn" id="sendBtn" onclick="sendMessage()">Send ➤</button>
+            <button class="send-btn" id="sendBtn" onclick="sendMessage()" disabled>
+                Send ➤
+            </button>
+        </div>
+    </div>
+
+    <!-- NEW CHAT MODAL -->
+    <div class="modal-overlay" id="newChatModal">
+        <div class="modal">
+            <h3>➕ New Chat</h3>
+            <input
+                type="text"
+                id="chatNameInput"
+                placeholder="Chat name (e.g. School Help)"
+                maxlength="30"
+            />
+            <label class="modal-toggle">
+                <input
+                    type="checkbox"
+                    id="privateToggle"
+                    onchange="togglePrivateField()"
+                />
+                🔒 Make this chat private
+            </label>
+            <div class="private-password-field" id="privatePasswordField">
+                <input
+                    type="password"
+                    id="chatPassword"
+                    placeholder="Set a password for this chat"
+                />
+            </div>
+            <div class="error-text" id="newChatError">Please enter a chat name!</div>
+            <div class="modal-buttons">
+                <button class="modal-btn btn-cancel" onclick="closeNewChatModal()">Cancel</button>
+                <button class="modal-btn btn-confirm" onclick="createNewChat()">Create Chat</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- PASSWORD MODAL -->
+    <div class="modal-overlay" id="passwordModal">
+        <div class="modal">
+            <h3>🔒 Private Chat</h3>
+            <p style="color:#aaa; font-size:13px; margin-bottom:15px;">
+                This chat is password protected!
+            </p>
+            <input
+                type="password"
+                id="accessPassword"
+                placeholder="Enter password"
+                onkeypress="handlePasswordKey(event)"
+            />
+            <div class="error-text" id="passwordError">Wrong password! Try again.</div>
+            <div class="modal-buttons">
+                <button class="modal-btn btn-cancel" onclick="closePasswordModal()">Cancel</button>
+                <button class="modal-btn btn-confirm" onclick="submitPassword()">Unlock 🔓</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- DELETE MODAL -->
+    <div class="modal-overlay" id="deleteModal">
+        <div class="modal">
+            <h3>🗑️ Delete Chat</h3>
+            <p style="color:#aaa; font-size:14px; margin-bottom:20px;">
+                Are you sure you want to delete this chat?<br>
+                <strong style="color:#ff4444;">This cannot be undone!</strong>
+            </p>
+            <div class="modal-buttons">
+                <button class="modal-btn btn-cancel" onclick="closeDeleteModal()">Cancel</button>
+                <button class="modal-btn" style="background:#ff4444; color:white; flex:1;"
+                    onclick="confirmDelete()">Delete 🗑️</button>
+            </div>
         </div>
     </div>
 
     <script>
         const userId = "user_" + Math.random().toString(36).substr(2, 9);
-        const chatBox = document.getElementById("chatBox");
-        const userInput = document.getElementById("userInput");
-        const sendBtn = document.getElementById("sendBtn");
+        let currentChatId = null;
+        let chatToDelete = null;
+        let pendingAccessChatId = null;
+
+        marked.setOptions({ breaks: true, gfm: true });
+
+        async function loadChatList() {
+            const res = await fetch(`/get_chats/${userId}`);
+            const data = await res.json();
+            const chatList = document.getElementById("chatList");
+
+            if (data.chats.length === 0) {
+                chatList.innerHTML = `<div class="no-chats">No chats yet!<br>Click New Chat to start</div>`;
+                return;
+            }
+
+            chatList.innerHTML = "";
+            data.chats.forEach(chat => {
+                const div = document.createElement("div");
+                div.className = "chat-item" + (chat.chat_id === currentChatId ? " active" : "");
+                div.id = "chatItem_" + chat.chat_id;
+                div.innerHTML = `
+                    <div class="chat-item-info" onclick="openChat('${chat.chat_id}', ${chat.private})">
+                        <div class="chat-item-name">${chat.name}</div>
+                        <div class="chat-item-meta">${chat.message_count} messages • ${chat.created_at}</div>
+                    </div>
+                    <div class="chat-item-icons">
+                        ${chat.private ? '<span class="lock-icon">🔒</span>' : ''}
+                        <button class="delete-btn" onclick="openDeleteModal('${chat.chat_id}')">🗑️</button>
+                    </div>
+                `;
+                chatList.appendChild(div);
+            });
+        }
+
+        function openNewChatModal() {
+            document.getElementById("newChatModal").classList.add("show");
+            document.getElementById("chatNameInput").focus();
+            document.getElementById("newChatError").style.display = "none";
+            document.getElementById("chatNameInput").value = "";
+            document.getElementById("chatPassword").value = "";
+            document.getElementById("privateToggle").checked = false;
+            document.getElementById("privatePasswordField").style.display = "none";
+        }
+
+        function closeNewChatModal() {
+            document.getElementById("newChatModal").classList.remove("show");
+        }
+
+        function togglePrivateField() {
+            const checked = document.getElementById("privateToggle").checked;
+            document.getElementById("privatePasswordField").style.display = checked ? "block" : "none";
+        }
+
+        async function createNewChat() {
+            const name = document.getElementById("chatNameInput").value.trim();
+            const isPrivate = document.getElementById("privateToggle").checked;
+            const password = document.getElementById("chatPassword").value;
+
+            if (!name) {
+                document.getElementById("newChatError").style.display = "block";
+                return;
+            }
+
+            const res = await fetch("/new_chat", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    user_id: userId,
+                    chat_name: name,
+                    private: isPrivate,
+                    password: password
+                })
+            });
+
+            const data = await res.json();
+            closeNewChatModal();
+            await loadChatList();
+            openChat(data.chat_id, isPrivate, password);
+        }
+
+        async function openChat(chatId, isPrivate, knownPassword = "") {
+            if (isPrivate && !knownPassword) {
+                pendingAccessChatId = chatId;
+                openPasswordModal();
+                return;
+            }
+
+            const res = await fetch("/access_chat", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    user_id: userId,
+                    chat_id: chatId,
+                    password: knownPassword
+                })
+            });
+
+            const data = await res.json();
+
+            if (data.status === "error") {
+                document.getElementById("passwordError").style.display = "block";
+                return;
+            }
+
+            currentChatId = chatId;
+            document.getElementById("currentChatName").textContent = "🤖 " + data.name;
+            document.getElementById("currentChatMeta").textContent = "Chat active • Groq LLaMA3";
+            document.getElementById("userInput").disabled = false;
+            document.getElementById("sendBtn").disabled = false;
+            document.getElementById("userInput").placeholder = "Type your message...";
+
+            const chatBox = document.getElementById("chatBox");
+            chatBox.innerHTML = "";
+
+            if (data.messages.length === 0) {
+                chatBox.innerHTML = `
+                    <div class="welcome" id="welcome">
+                        <h2>🤖</h2>
+                        <p>Start the conversation!</p>
+                    </div>`;
+            } else {
+                data.messages.forEach(msg => {
+                    addMessage(msg.content, msg.role === "user", false);
+                });
+            }
+
+            document.querySelectorAll(".chat-item").forEach(el => el.classList.remove("active"));
+            const item = document.getElementById("chatItem_" + chatId);
+            if (item) item.classList.add("active");
+
+            closePasswordModal();
+            loadChatList();
+        }
 
         function handleKey(event) {
             if (event.key === "Enter") sendMessage();
         }
 
-        function addMessage(text, isUser) {
+        async function sendMessage() {
+            if (!currentChatId) return;
+            const message = document.getElementById("userInput").value.trim();
+            if (!message) return;
+
+            addMessage(message, true);
+            document.getElementById("userInput").value = "";
+            document.getElementById("sendBtn").disabled = true;
+            showTyping();
+
+            try {
+                const res = await fetch("/chat", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                        user_id: userId,
+                        chat_id: currentChatId,
+                        message: message
+                    })
+                });
+
+                const data = await res.json();
+                removeTyping();
+                addMessage(data.reply, false);
+                loadChatList();
+
+            } catch (err) {
+                removeTyping();
+                addMessage("Sorry something went wrong! Please try again.", false);
+            }
+
+            document.getElementById("sendBtn").disabled = false;
+            document.getElementById("userInput").focus();
+        }
+
+        function addMessage(text, isUser, animate = true) {
             const welcome = document.getElementById("welcome");
             if (welcome) welcome.remove();
 
+            const chatBox = document.getElementById("chatBox");
             const div = document.createElement("div");
             div.classList.add("message");
 
@@ -219,14 +733,16 @@
                 div.textContent = text;
             } else {
                 div.classList.add("bot-message");
-                div.innerHTML = `<div class="name">🤖 AI Chatbot</div>${text}`;
+                div.innerHTML = `<div class="name">🤖 AI Chatbot</div>${marked.parse(text)}`;
             }
 
+            if (!animate) div.style.animation = "none";
             chatBox.appendChild(div);
             chatBox.scrollTop = chatBox.scrollHeight;
         }
 
         function showTyping() {
+            const chatBox = document.getElementById("chatBox");
             const div = document.createElement("div");
             div.classList.add("typing");
             div.id = "typing";
@@ -236,55 +752,93 @@
         }
 
         function removeTyping() {
-            const typing = document.getElementById("typing");
-            if (typing) typing.remove();
+            const t = document.getElementById("typing");
+            if (t) t.remove();
         }
 
-        async function sendMessage() {
-            const message = userInput.value.trim();
-            if (!message) return;
-
-            addMessage(message, true);
-            userInput.value = "";
-            sendBtn.disabled = true;
-            showTyping();
-
-            try {
-                const response = await fetch("/chat", {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({
-                        user_id: userId,
-                        message: message
-                    })
-                });
-
-                const data = await response.json();
-                removeTyping();
-                addMessage(data.reply, false);
-
-            } catch (error) {
-                removeTyping();
-                addMessage("Sorry something went wrong! Please try again.", false);
-            }
-
-            sendBtn.disabled = false;
-            userInput.focus();
+        function openDeleteModal(chatId) {
+            chatToDelete = chatId;
+            document.getElementById("deleteModal").classList.add("show");
         }
 
-        async function clearChat() {
-            await fetch("/clear", {
+        function closeDeleteModal() {
+            document.getElementById("deleteModal").classList.remove("show");
+            chatToDelete = null;
+        }
+
+        async function confirmDelete() {
+            if (!chatToDelete) return;
+
+            await fetch("/delete_chat", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ user_id: userId })
+                body: JSON.stringify({
+                    user_id: userId,
+                    chat_id: chatToDelete
+                })
             });
 
-            chatBox.innerHTML = `
-                <div class="welcome" id="welcome">
-                    <h2>🤖</h2>
-                    <p>Ask me anything!</p>
-                </div>`;
+            if (currentChatId === chatToDelete) {
+                currentChatId = null;
+                document.getElementById("currentChatName").textContent = "Select a chat";
+                document.getElementById("currentChatMeta").textContent = "No chat selected";
+                document.getElementById("userInput").disabled = true;
+                document.getElementById("sendBtn").disabled = true;
+                document.getElementById("userInput").placeholder = "Select or create a chat first...";
+                document.getElementById("chatBox").innerHTML = `
+                    <div class="welcome" id="welcome">
+                        <h2>🤖</h2>
+                        <p>Create a new chat to start talking!</p>
+                    </div>`;
+            }
+
+            closeDeleteModal();
+            loadChatList();
         }
+
+        function openPasswordModal() {
+            document.getElementById("passwordModal").classList.add("show");
+            document.getElementById("accessPassword").value = "";
+            document.getElementById("passwordError").style.display = "none";
+            setTimeout(() => document.getElementById("accessPassword").focus(), 100);
+        }
+
+        function closePasswordModal() {
+            document.getElementById("passwordModal").classList.remove("show");
+            pendingAccessChatId = null;
+        }
+
+        function handlePasswordKey(event) {
+            if (event.key === "Enter") submitPassword();
+        }
+
+        async function submitPassword() {
+            const password = document.getElementById("accessPassword").value;
+            if (!pendingAccessChatId) return;
+
+            const res = await fetch("/access_chat", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    user_id: userId,
+                    chat_id: pendingAccessChatId,
+                    password: password
+                })
+            });
+
+            const data = await res.json();
+
+            if (data.status === "error") {
+                document.getElementById("passwordError").style.display = "block";
+                return;
+            }
+
+            const chatId = pendingAccessChatId;
+            closePasswordModal();
+            openChat(chatId, false, password);
+        }
+
+        loadChatList();
     </script>
 </body>
 </html>
