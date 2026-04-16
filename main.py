@@ -614,7 +614,7 @@ def chat(data: Message):
 
     try:
         response = client.chat.completions.create(
-            model="llama-3.1-8b-instant",
+            model="openai/gpt-oss-safeguard-20b",
             messages=[
                 {"role": "system", "content": SYSTEM_PROMPT},
                 *chat["messages"]
