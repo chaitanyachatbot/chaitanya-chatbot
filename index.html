@@ -3,83 +3,278 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CHAITANYA info-base update</title>
+    <title>CHAITANYA AI</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;600&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/9.1.6/marked.min.js"></script>
     <style>
+        :root {
+            --cyan: #00f5ff;
+            --teal: #00c9c9;
+            --dark-bg: #040d1a;
+            --panel-bg: #070f1f;
+            --sidebar-bg: #050c18;
+            --card-bg: #0a1628;
+            --border: rgba(0, 245, 255, 0.15);
+            --border-bright: rgba(0, 245, 255, 0.5);
+            --text: #c8e6f0;
+            --text-dim: #4a7a8a;
+            --accent: #ff6b35;
+            --accent2: #7b2fff;
+            --glow: 0 0 20px rgba(0, 245, 255, 0.3);
+            --glow-strong: 0 0 40px rgba(0, 245, 255, 0.6);
+        }
+
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
-            font-family: 'Segoe UI', sans-serif;
-            background: #0f0f1a;
-            color: white;
+            font-family: 'Rajdhani', sans-serif;
+            background: var(--dark-bg);
+            color: var(--text);
             height: 100vh;
             display: flex;
             overflow: hidden;
+            position: relative;
         }
 
-        /* SIDEBAR */
+        /* ===== BACKGROUND GRID ===== */
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background-image:
+                linear-gradient(rgba(0,245,255,0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0,245,255,0.03) 1px, transparent 1px);
+            background-size: 40px 40px;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        body::after {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background: radial-gradient(ellipse at 20% 50%, rgba(0,100,255,0.08) 0%, transparent 60%),
+                        radial-gradient(ellipse at 80% 20%, rgba(123,47,255,0.06) 0%, transparent 50%),
+                        radial-gradient(ellipse at 60% 80%, rgba(0,245,255,0.05) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* ===== SIDEBAR ===== */
         .sidebar {
-            width: 260px;
-            background: #111127;
+            width: 280px;
+            background: var(--sidebar-bg);
             display: flex;
             flex-direction: column;
-            border-right: 1px solid #2d2d44;
+            border-right: 1px solid var(--border);
             height: 100vh;
+            position: relative;
+            z-index: 10;
+            flex-shrink: 0;
         }
 
+        .sidebar::after {
+            content: '';
+            position: absolute;
+            top: 0; right: 0;
+            width: 1px;
+            height: 100%;
+            background: linear-gradient(to bottom, transparent, var(--cyan), transparent);
+            opacity: 0.4;
+        }
+
+        /* ===== LOGO HEADER ===== */
         .sidebar-header {
-            padding: 20px;
-            background: linear-gradient(135deg, #6366f1, #8b5cf6);
-            text-align: center;
+            padding: 24px 20px 20px;
+            background: linear-gradient(135deg, rgba(0,245,255,0.05), rgba(123,47,255,0.05));
+            border-bottom: 1px solid var(--border);
+            position: relative;
+            overflow: hidden;
         }
 
-        .sidebar-header h2 { font-size: 18px; }
-        .sidebar-header p { font-size: 11px; opacity: 0.8; margin-top: 3px; }
+        .sidebar-header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: conic-gradient(from 0deg, transparent 0deg, rgba(0,245,255,0.03) 60deg, transparent 120deg);
+            animation: rotate 8s linear infinite;
+        }
 
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .logo-area {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* ===== GEOMETRIC PANTHER SVG ===== */
+        .panther-logo {
+            width: 52px;
+            height: 52px;
+            flex-shrink: 0;
+            filter: drop-shadow(0 0 8px rgba(0,245,255,0.6));
+            animation: panther-pulse 3s ease-in-out infinite;
+        }
+
+        @keyframes panther-pulse {
+            0%, 100% { filter: drop-shadow(0 0 8px rgba(0,245,255,0.6)); }
+            50% { filter: drop-shadow(0 0 18px rgba(0,245,255,1)) drop-shadow(0 0 30px rgba(0,245,255,0.4)); }
+        }
+
+        .logo-text {
+            position: relative;
+            z-index: 1;
+        }
+
+        .logo-text h2 {
+            font-family: 'Orbitron', monospace;
+            font-size: 15px;
+            font-weight: 900;
+            letter-spacing: 3px;
+            color: var(--cyan);
+            text-shadow: 0 0 10px rgba(0,245,255,0.5);
+            line-height: 1.2;
+        }
+
+        .logo-text p {
+            font-size: 10px;
+            letter-spacing: 2px;
+            color: var(--text-dim);
+            text-transform: uppercase;
+            margin-top: 3px;
+        }
+
+        /* ===== STATUS BAR ===== */
+        .status-bar {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            margin-top: 12px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .status-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: #00ff88;
+            box-shadow: 0 0 8px #00ff88;
+            animation: blink 2s ease-in-out infinite;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+
+        .status-text {
+            font-size: 10px;
+            letter-spacing: 1px;
+            color: #00ff88;
+            text-transform: uppercase;
+        }
+
+        /* ===== NEW CHAT BUTTON ===== */
         .new-chat-btn {
-            margin: 15px;
-            padding: 12px;
-            background: linear-gradient(135deg, #6366f1, #8b5cf6);
-            border: none;
-            border-radius: 10px;
-            color: white;
-            font-size: 14px;
+            margin: 16px;
+            padding: 13px 16px;
+            background: transparent;
+            border: 1px solid var(--border-bright);
+            border-radius: 4px;
+            color: var(--cyan);
+            font-family: 'Orbitron', monospace;
+            font-size: 11px;
+            letter-spacing: 2px;
             cursor: pointer;
-            width: calc(100% - 30px);
-            transition: opacity 0.3s;
+            width: calc(100% - 32px);
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+            text-transform: uppercase;
         }
 
-        .new-chat-btn:hover { opacity: 0.85; }
+        .new-chat-btn::before {
+            content: '';
+            position: absolute;
+            top: 0; left: -100%;
+            width: 100%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(0,245,255,0.1), transparent);
+            transition: left 0.4s;
+        }
+
+        .new-chat-btn:hover::before { left: 100%; }
+        .new-chat-btn:hover {
+            background: rgba(0,245,255,0.08);
+            box-shadow: var(--glow);
+            border-color: var(--cyan);
+        }
+
+        /* ===== CHAT LIST ===== */
+        .chat-list-label {
+            padding: 0 16px 8px;
+            font-size: 9px;
+            letter-spacing: 3px;
+            color: var(--text-dim);
+            text-transform: uppercase;
+            font-family: 'Orbitron', monospace;
+        }
 
         .chat-list {
             flex: 1;
             overflow-y: auto;
-            padding: 5px 10px;
+            padding: 0 10px;
         }
 
-        .chat-list::-webkit-scrollbar { width: 4px; }
+        .chat-list::-webkit-scrollbar { width: 3px; }
         .chat-list::-webkit-scrollbar-thumb {
-            background: #6366f1;
+            background: var(--cyan);
             border-radius: 10px;
+            opacity: 0.5;
         }
+        .chat-list::-webkit-scrollbar-track { background: transparent; }
 
         .chat-item {
             padding: 10px 12px;
-            border-radius: 10px;
+            border-radius: 4px;
             cursor: pointer;
-            margin-bottom: 5px;
+            margin-bottom: 4px;
             display: flex;
             align-items: center;
             justify-content: space-between;
-            transition: background 0.2s;
+            transition: all 0.2s;
             border: 1px solid transparent;
+            position: relative;
         }
 
-        .chat-item:hover { background: #1e1e3a; }
-        .chat-item.active {
-            background: #1e1e3a;
-            border-color: #6366f1;
+        .chat-item::before {
+            content: '';
+            position: absolute;
+            left: 0; top: 0;
+            width: 2px; height: 100%;
+            background: var(--cyan);
+            border-radius: 2px;
+            opacity: 0;
+            transition: opacity 0.2s;
         }
+
+        .chat-item:hover { background: rgba(0,245,255,0.04); border-color: var(--border); }
+        .chat-item:hover::before { opacity: 1; }
+
+        .chat-item.active {
+            background: rgba(0,245,255,0.07);
+            border-color: var(--border-bright);
+        }
+        .chat-item.active::before { opacity: 1; }
 
         .chat-item-info { flex: 1; overflow: hidden; }
 
@@ -89,27 +284,30 @@
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
+            color: var(--text);
+            letter-spacing: 0.5px;
         }
 
         .chat-item-meta {
             font-size: 10px;
-            color: #666;
+            color: var(--text-dim);
             margin-top: 2px;
+            letter-spacing: 0.5px;
         }
 
         .chat-item-icons { display: flex; gap: 5px; align-items: center; }
-        .lock-icon { font-size: 11px; color: #8b5cf6; }
+        .lock-icon { font-size: 10px; color: var(--accent); }
 
         .delete-btn {
             background: none;
             border: none;
             color: #ff4444;
             cursor: pointer;
-            font-size: 13px;
+            font-size: 12px;
             opacity: 0;
             transition: opacity 0.2s;
-            padding: 2px 5px;
-            border-radius: 5px;
+            padding: 3px 5px;
+            border-radius: 3px;
         }
 
         .chat-item:hover .delete-btn { opacity: 1; }
@@ -117,429 +315,737 @@
 
         .no-chats {
             text-align: center;
-            color: #444;
-            font-size: 13px;
+            color: var(--text-dim);
+            font-size: 12px;
             padding: 30px 10px;
+            letter-spacing: 1px;
+            line-height: 1.8;
         }
 
-        /* MAIN AREA */
+        /* ===== MAIN AREA ===== */
         .main {
             flex: 1;
             display: flex;
             flex-direction: column;
             height: 100vh;
+            position: relative;
+            z-index: 5;
+            overflow: hidden;
         }
 
+        /* ===== CHAT HEADER ===== */
         .chat-header {
-            padding: 16px 24px;
-            background: #1a1a2e;
-            border-bottom: 1px solid #2d2d44;
+            padding: 16px 28px;
+            background: rgba(7,15,31,0.9);
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            backdrop-filter: blur(10px);
+            position: relative;
         }
 
-        .chat-header h3 { font-size: 16px; }
-        .chat-header span { font-size: 11px; color: #666; }
+        .chat-header::after {
+            content: '';
+            position: absolute;
+            bottom: -1px; left: 0;
+            width: 100%; height: 1px;
+            background: linear-gradient(90deg, transparent, var(--cyan), transparent);
+            opacity: 0.3;
+        }
 
+        .header-left { display: flex; flex-direction: column; gap: 2px; }
+
+        .chat-header h3 {
+            font-family: 'Orbitron', monospace;
+            font-size: 13px;
+            letter-spacing: 2px;
+            color: var(--cyan);
+            text-shadow: 0 0 10px rgba(0,245,255,0.3);
+        }
+
+        .chat-header span {
+            font-size: 10px;
+            color: var(--text-dim);
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .header-badge {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 14px;
+            border: 1px solid var(--border);
+            border-radius: 2px;
+            font-family: 'Orbitron', monospace;
+            font-size: 9px;
+            letter-spacing: 2px;
+            color: var(--text-dim);
+        }
+
+        .header-badge-dot {
+            width: 5px; height: 5px;
+            border-radius: 50%;
+            background: var(--cyan);
+            box-shadow: 0 0 6px var(--cyan);
+            animation: blink 2s ease-in-out infinite;
+        }
+
+        /* ===== CHAT BOX ===== */
         .chat-box {
             flex: 1;
             overflow-y: auto;
-            padding: 20px;
+            padding: 24px 28px;
             display: flex;
             flex-direction: column;
-            gap: 15px;
+            gap: 18px;
         }
 
-        .chat-box::-webkit-scrollbar { width: 5px; }
+        .chat-box::-webkit-scrollbar { width: 4px; }
         .chat-box::-webkit-scrollbar-thumb {
-            background: #6366f1;
+            background: rgba(0,245,255,0.2);
             border-radius: 10px;
         }
+        .chat-box::-webkit-scrollbar-track { background: transparent; }
 
+        /* ===== MESSAGES ===== */
         .message {
-            max-width: 75%;
-            padding: 12px 18px;
-            border-radius: 18px;
-            font-size: 15px;
-            line-height: 1.6;
-            animation: fadeIn 0.3s ease;
+            max-width: 72%;
+            padding: 14px 18px;
+            font-size: 14px;
+            line-height: 1.65;
+            animation: msgIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            position: relative;
         }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
+        @keyframes msgIn {
+            from { opacity: 0; transform: translateY(16px) scale(0.96); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
         }
 
         .user-message {
-            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            background: linear-gradient(135deg, rgba(0,245,255,0.12), rgba(0,150,255,0.08));
+            border: 1px solid rgba(0,245,255,0.25);
+            border-radius: 2px 16px 16px 16px;
             align-self: flex-end;
-            border-bottom-right-radius: 4px;
+            color: #e0f4ff;
+            clip-path: polygon(0 0, calc(100% - 12px) 0, 100% 12px, 100% 100%, 0 100%);
+        }
+
+        .user-message::before {
+            content: 'YOU';
+            position: absolute;
+            top: -18px; right: 0;
+            font-family: 'Orbitron', monospace;
+            font-size: 8px;
+            letter-spacing: 2px;
+            color: var(--text-dim);
         }
 
         .bot-message {
-            background: #2d2d44;
+            background: rgba(10,22,40,0.9);
+            border: 1px solid var(--border);
+            border-radius: 16px 2px 16px 16px;
             align-self: flex-start;
-            border-bottom-left-radius: 4px;
-            max-width: 85%;
+            max-width: 82%;
+            clip-path: polygon(12px 0, 100% 0, 100% 100%, 0 100%, 0 12px);
+        }
+
+        .bot-message::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 1px;
+            background: linear-gradient(90deg, var(--cyan), transparent);
+            opacity: 0.4;
         }
 
         .bot-message .name {
-            font-size: 11px;
-            color: #8b5cf6;
-            margin-bottom: 8px;
-            font-weight: bold;
+            font-family: 'Orbitron', monospace;
+            font-size: 9px;
+            color: var(--cyan);
+            margin-bottom: 10px;
+            letter-spacing: 2px;
+            text-shadow: 0 0 8px rgba(0,245,255,0.4);
+            display: flex;
+            align-items: center;
+            gap: 6px;
         }
 
-        /* Markdown styles */
+        .bot-message .name::before {
+            content: '';
+            display: inline-block;
+            width: 16px; height: 1px;
+            background: var(--cyan);
+            opacity: 0.6;
+        }
+
+        /* Markdown */
         .bot-message p { margin-bottom: 8px; }
         .bot-message p:last-child { margin-bottom: 0; }
         .bot-message h1, .bot-message h2, .bot-message h3 {
-            color: #a78bfa;
-            margin: 12px 0 6px 0;
+            font-family: 'Orbitron', monospace;
+            color: var(--cyan);
+            margin: 14px 0 8px 0;
+            letter-spacing: 1px;
         }
-        .bot-message h1 { font-size: 18px; }
-        .bot-message h2 { font-size: 16px; }
-        .bot-message h3 { font-size: 14px; }
-        .bot-message ul, .bot-message ol {
-            padding-left: 20px;
-            margin-bottom: 8px;
-        }
-        .bot-message li { margin-bottom: 4px; }
-        .bot-message strong { color: #c4b5fd; }
-        .bot-message em { color: #d4b8ff; }
+        .bot-message h1 { font-size: 16px; }
+        .bot-message h2 { font-size: 14px; }
+        .bot-message h3 { font-size: 12px; }
+        .bot-message ul, .bot-message ol { padding-left: 20px; margin-bottom: 8px; }
+        .bot-message li { margin-bottom: 5px; }
+        .bot-message strong { color: #7df9ff; }
+        .bot-message em { color: #b0e0e6; font-style: italic; }
         .bot-message code {
-            background: #1a1a2e;
-            padding: 2px 6px;
-            border-radius: 4px;
-            font-size: 13px;
-            color: #a78bfa;
-            font-family: monospace;
+            background: rgba(0,245,255,0.07);
+            border: 1px solid rgba(0,245,255,0.15);
+            padding: 2px 7px;
+            border-radius: 3px;
+            font-size: 12px;
+            color: var(--cyan);
+            font-family: 'Courier New', monospace;
         }
         .bot-message pre {
-            background: #1a1a2e;
-            padding: 12px;
-            border-radius: 8px;
+            background: rgba(0,0,0,0.4);
+            border: 1px solid var(--border);
+            padding: 14px;
+            border-radius: 4px;
             overflow-x: auto;
-            margin: 8px 0;
-            border: 1px solid #3d3d5e;
+            margin: 10px 0;
         }
-        .bot-message pre code {
-            background: none;
-            padding: 0;
-            color: #e2e8f0;
-        }
+        .bot-message pre code { background: none; border: none; color: #7df9ff; }
         .bot-message blockquote {
-            border-left: 3px solid #6366f1;
+            border-left: 2px solid var(--cyan);
             padding-left: 12px;
-            color: #aaa;
+            color: var(--text-dim);
             margin: 8px 0;
             font-style: italic;
         }
-        .bot-message a { color: #818cf8; }
-        .bot-message hr {
-            border: none;
-            border-top: 1px solid #3d3d5e;
-            margin: 10px 0;
-        }
-        .bot-message table {
-            width: 100%;
-            border-collapse: collapse;
-            margin: 8px 0;
-            font-size: 13px;
-        }
+        .bot-message a { color: var(--cyan); }
+        .bot-message hr { border: none; border-top: 1px solid var(--border); margin: 12px 0; }
+        .bot-message table { width: 100%; border-collapse: collapse; margin: 10px 0; font-size: 13px; }
         .bot-message th {
-            background: #1a1a2e;
-            padding: 8px;
+            background: rgba(0,245,255,0.07);
+            padding: 8px 12px;
             text-align: left;
-            color: #a78bfa;
-            border: 1px solid #3d3d5e;
+            color: var(--cyan);
+            border: 1px solid var(--border);
+            font-family: 'Orbitron', monospace;
+            font-size: 10px;
+            letter-spacing: 1px;
         }
-        .bot-message td {
-            padding: 8px;
-            border: 1px solid #3d3d5e;
-        }
-        .bot-message tr:nth-child(even) { background: #1e1e3a; }
+        .bot-message td { padding: 8px 12px; border: 1px solid var(--border); }
+        .bot-message tr:nth-child(even) { background: rgba(0,245,255,0.02); }
 
+        /* ===== TYPING INDICATOR ===== */
         .typing {
-            background: #2d2d44;
+            background: rgba(10,22,40,0.9);
+            border: 1px solid var(--border);
             align-self: flex-start;
-            padding: 12px 18px;
-            border-radius: 18px;
+            padding: 14px 20px;
+            border-radius: 16px 2px 16px 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .typing-label {
+            font-family: 'Orbitron', monospace;
+            font-size: 8px;
+            letter-spacing: 2px;
+            color: var(--text-dim);
         }
 
         .typing span {
             display: inline-block;
-            width: 8px; height: 8px;
-            background: #8b5cf6;
+            width: 6px; height: 6px;
+            background: var(--cyan);
             border-radius: 50%;
-            margin: 0 2px;
-            animation: bounce 1.2s infinite;
+            margin: 0 1px;
+            animation: typeBounce 1.4s infinite;
+            box-shadow: 0 0 6px var(--cyan);
         }
 
         .typing span:nth-child(2) { animation-delay: 0.2s; }
         .typing span:nth-child(3) { animation-delay: 0.4s; }
 
-        @keyframes bounce {
-            0%, 80%, 100% { transform: translateY(0); }
-            40% { transform: translateY(-8px); }
+        @keyframes typeBounce {
+            0%, 80%, 100% { transform: translateY(0); opacity: 0.4; }
+            40% { transform: translateY(-8px); opacity: 1; }
         }
 
+        /* ===== WELCOME SCREEN ===== */
+        .welcome {
+            text-align: center;
+            margin: auto;
+            padding: 40px;
+        }
+
+        .welcome-panther {
+            width: 100px;
+            height: 100px;
+            margin: 0 auto 24px;
+            filter: drop-shadow(0 0 20px rgba(0,245,255,0.5));
+            animation: welcome-float 4s ease-in-out infinite;
+        }
+
+        @keyframes welcome-float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            33% { transform: translateY(-12px) rotate(2deg); }
+            66% { transform: translateY(-6px) rotate(-1deg); }
+        }
+
+        .welcome h2 {
+            font-family: 'Orbitron', monospace;
+            font-size: 22px;
+            letter-spacing: 4px;
+            color: var(--cyan);
+            text-shadow: 0 0 20px rgba(0,245,255,0.4);
+            margin-bottom: 10px;
+        }
+
+        .welcome p {
+            font-size: 13px;
+            color: var(--text-dim);
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        .welcome-line {
+            width: 100px;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--cyan), transparent);
+            margin: 16px auto;
+            opacity: 0.5;
+        }
+
+        /* ===== INPUT AREA ===== */
         .input-area {
-            padding: 20px;
-            background: #16213e;
+            padding: 20px 28px;
+            background: rgba(5,12,24,0.95);
+            border-top: 1px solid var(--border);
             display: flex;
-            gap: 10px;
+            gap: 12px;
             align-items: center;
+            position: relative;
+            backdrop-filter: blur(10px);
+        }
+
+        .input-area::before {
+            content: '';
+            position: absolute;
+            top: -1px; left: 0;
+            width: 100%; height: 1px;
+            background: linear-gradient(90deg, transparent, var(--cyan), transparent);
+            opacity: 0.3;
+        }
+
+        .input-wrapper {
+            flex: 1;
+            position: relative;
         }
 
         .input-area input {
-            flex: 1;
-            padding: 14px 20px;
-            border-radius: 30px;
-            border: 2px solid #2d2d44;
-            background: #1a1a2e;
-            color: white;
-            font-size: 15px;
+            width: 100%;
+            padding: 14px 50px 14px 20px;
+            background: rgba(0,245,255,0.03);
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            color: var(--text);
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 14px;
+            letter-spacing: 0.5px;
             outline: none;
-            transition: border 0.3s;
+            transition: all 0.3s;
         }
 
-        .input-area input:focus { border-color: #6366f1; }
-        .input-area input::placeholder { color: #555; }
-        .input-area input:disabled { opacity: 0.5; }
+        .input-area input:focus {
+            border-color: var(--border-bright);
+            background: rgba(0,245,255,0.05);
+            box-shadow: 0 0 0 1px rgba(0,245,255,0.1), var(--glow);
+        }
+
+        .input-area input::placeholder { color: var(--text-dim); font-size: 13px; }
+        .input-area input:disabled { opacity: 0.3; }
 
         .send-btn {
-            background: linear-gradient(135deg, #6366f1, #8b5cf6);
-            color: white;
-            border: none;
-            padding: 14px 24px;
-            border-radius: 30px;
-            font-size: 15px;
+            width: 50px;
+            height: 50px;
+            background: transparent;
+            border: 1px solid var(--border-bright);
+            border-radius: 4px;
+            color: var(--cyan);
             cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            flex-shrink: 0;
+            position: relative;
+            overflow: hidden;
+            clip-path: polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 8px 100%, 0 calc(100% - 8px));
+        }
+
+        .send-btn::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(0,245,255,0.15), transparent);
+            opacity: 0;
             transition: opacity 0.3s;
         }
 
-        .send-btn:hover { opacity: 0.85; }
-        .send-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+        .send-btn:hover::before { opacity: 1; }
+        .send-btn:hover { box-shadow: var(--glow); border-color: var(--cyan); }
+        .send-btn:disabled { opacity: 0.3; cursor: not-allowed; }
 
-        .welcome {
-            text-align: center;
-            color: #555;
-            margin: auto;
-        }
-
-        .welcome h2 { font-size: 40px; margin-bottom: 10px; }
-        .welcome p { font-size: 15px; }
-
-        /* MODALS */
+        /* ===== MODALS ===== */
         .modal-overlay {
             display: none;
             position: fixed;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            background: rgba(0,0,0,0.7);
+            inset: 0;
+            background: rgba(2,6,15,0.85);
             z-index: 1000;
             align-items: center;
             justify-content: center;
+            backdrop-filter: blur(4px);
         }
 
         .modal-overlay.show { display: flex; }
 
         .modal {
-            background: #1a1a2e;
-            border-radius: 16px;
-            padding: 30px;
-            width: 340px;
-            border: 1px solid #2d2d44;
-            box-shadow: 0 0 40px rgba(99,102,241,0.3);
+            background: var(--panel-bg);
+            border: 1px solid var(--border-bright);
+            border-radius: 4px;
+            padding: 32px;
+            width: 360px;
+            box-shadow: var(--glow-strong), inset 0 0 60px rgba(0,245,255,0.02);
+            position: relative;
+            clip-path: polygon(0 0, calc(100% - 16px) 0, 100% 16px, 100% 100%, 16px 100%, 0 calc(100% - 16px));
+            animation: modalIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        @keyframes modalIn {
+            from { opacity: 0; transform: scale(0.9) translateY(20px); }
+            to { opacity: 1; transform: scale(1) translateY(0); }
+        }
+
+        .modal::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 1px;
+            background: linear-gradient(90deg, var(--cyan), transparent);
+            opacity: 0.6;
         }
 
         .modal h3 {
-            margin-bottom: 20px;
-            font-size: 18px;
-            color: #8b5cf6;
+            font-family: 'Orbitron', monospace;
+            font-size: 13px;
+            letter-spacing: 3px;
+            color: var(--cyan);
+            margin-bottom: 22px;
+            text-shadow: 0 0 10px rgba(0,245,255,0.3);
         }
 
         .modal input {
             width: 100%;
             padding: 12px 16px;
-            border-radius: 10px;
-            border: 2px solid #2d2d44;
-            background: #0f0f1a;
-            color: white;
+            background: rgba(0,245,255,0.03);
+            border: 1px solid var(--border);
+            border-radius: 3px;
+            color: var(--text);
+            font-family: 'Rajdhani', sans-serif;
             font-size: 14px;
             outline: none;
-            margin-bottom: 12px;
-            transition: border 0.3s;
+            margin-bottom: 14px;
+            transition: all 0.3s;
+            letter-spacing: 0.5px;
         }
 
-        .modal input:focus { border-color: #6366f1; }
+        .modal input:focus {
+            border-color: var(--border-bright);
+            box-shadow: var(--glow);
+        }
 
         .modal-toggle {
             display: flex;
             align-items: center;
             gap: 10px;
             margin-bottom: 16px;
-            font-size: 14px;
-            color: #aaa;
+            font-size: 13px;
+            color: var(--text-dim);
             cursor: pointer;
+            letter-spacing: 1px;
         }
 
         .modal-toggle input[type="checkbox"] {
-            width: 18px;
-            height: 18px;
+            width: 16px; height: 16px;
             cursor: pointer;
             margin: 0;
-            accent-color: #6366f1;
+            accent-color: var(--cyan);
         }
 
-        .modal-buttons {
-            display: flex;
-            gap: 10px;
-            margin-top: 5px;
-        }
+        .modal-buttons { display: flex; gap: 10px; margin-top: 6px; }
 
         .modal-btn {
             flex: 1;
             padding: 12px;
-            border-radius: 10px;
+            border-radius: 3px;
             border: none;
             cursor: pointer;
-            font-size: 14px;
-            font-weight: 600;
-            transition: opacity 0.3s;
+            font-family: 'Orbitron', monospace;
+            font-size: 10px;
+            letter-spacing: 2px;
+            font-weight: 700;
+            transition: all 0.3s;
+            text-transform: uppercase;
         }
-
-        .modal-btn:hover { opacity: 0.85; }
 
         .btn-confirm {
-            background: linear-gradient(135deg, #6366f1, #8b5cf6);
-            color: white;
+            background: transparent;
+            border: 1px solid var(--border-bright);
+            color: var(--cyan);
         }
+        .btn-confirm:hover { background: rgba(0,245,255,0.1); box-shadow: var(--glow); }
 
         .btn-cancel {
-            background: #2d2d44;
-            color: #aaa;
+            background: transparent;
+            border: 1px solid rgba(255,255,255,0.1);
+            color: var(--text-dim);
         }
+        .btn-cancel:hover { background: rgba(255,255,255,0.05); }
 
         .error-text {
             color: #ff4444;
-            font-size: 12px;
+            font-size: 11px;
             margin-bottom: 10px;
             display: none;
+            letter-spacing: 1px;
+            text-transform: uppercase;
         }
 
         .private-password-field { display: none; }
+
+        /* ===== SCAN LINE EFFECT ===== */
+        @keyframes scanline {
+            0% { transform: translateY(-100%); }
+            100% { transform: translateY(100vh); }
+        }
+
+        .scanline {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 2px;
+            background: linear-gradient(90deg, transparent, rgba(0,245,255,0.03), transparent);
+            animation: scanline 6s linear infinite;
+            pointer-events: none;
+            z-index: 100;
+        }
+
+        /* ===== CORNER DECORATIONS ===== */
+        .corner-tl, .corner-br {
+            position: fixed;
+            width: 40px; height: 40px;
+            pointer-events: none;
+            z-index: 200;
+        }
+
+        .corner-tl {
+            top: 10px; left: 10px;
+            border-top: 1px solid rgba(0,245,255,0.3);
+            border-left: 1px solid rgba(0,245,255,0.3);
+        }
+
+        .corner-br {
+            bottom: 10px; right: 10px;
+            border-bottom: 1px solid rgba(0,245,255,0.3);
+            border-right: 1px solid rgba(0,245,255,0.3);
+        }
     </style>
 </head>
 <body>
 
-    <!-- SIDEBAR -->
+    <!-- Ambient FX -->
+    <div class="scanline"></div>
+    <div class="corner-tl"></div>
+    <div class="corner-br"></div>
+
+    <!-- ===== SIDEBAR ===== -->
     <div class="sidebar">
         <div class="sidebar-header">
-            <h2>🤖🧠🇦🇮👾 CHAITANYA</h2>
-            <p>created by crn</p>
+            <div class="logo-area">
+                <!-- GEOMETRIC PANTHER SVG LOGO -->
+                <svg class="panther-logo" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                    <!-- Body base -->
+                    <polygon points="50,8 72,22 78,48 68,72 50,82 32,72 22,48 28,22" fill="none" stroke="#00f5ff" stroke-width="1.2" opacity="0.3"/>
+                    <!-- Inner geo body -->
+                    <polygon points="50,18 64,28 68,50 60,66 50,72 40,66 32,50 36,28" fill="rgba(0,245,255,0.06)" stroke="#00f5ff" stroke-width="1" opacity="0.5"/>
+                    <!-- Head -->
+                    <polygon points="50,12 62,20 62,36 50,42 38,36 38,20" fill="rgba(0,245,255,0.1)" stroke="#00f5ff" stroke-width="1.2"/>
+                    <!-- Ears -->
+                    <polygon points="40,20 34,10 38,22" fill="rgba(0,245,255,0.15)" stroke="#00f5ff" stroke-width="1"/>
+                    <polygon points="60,20 66,10 62,22" fill="rgba(0,245,255,0.15)" stroke="#00f5ff" stroke-width="1"/>
+                    <!-- Eyes -->
+                    <polygon points="45,26 48,23 51,26 48,29" fill="#00f5ff" opacity="0.9"/>
+                    <polygon points="55,26 58,23 61,26 58,29" fill="#00f5ff" opacity="0.9"/>
+                    <!-- Eye glow -->
+                    <circle cx="48" cy="26" r="3" fill="none" stroke="#00f5ff" stroke-width="0.5" opacity="0.5"/>
+                    <circle cx="58" cy="26" r="3" fill="none" stroke="#00f5ff" stroke-width="0.5" opacity="0.5"/>
+                    <!-- Nose -->
+                    <polygon points="50,31 52,34 50,36 48,34" fill="#00f5ff" opacity="0.7"/>
+                    <!-- Body geo -->
+                    <polygon points="50,44 62,50 64,64 50,72 36,64 38,50" fill="rgba(0,245,255,0.06)" stroke="#00f5ff" stroke-width="1"/>
+                    <!-- Front legs -->
+                    <line x1="40" y1="66" x2="34" y2="86" stroke="#00f5ff" stroke-width="1.5" opacity="0.7"/>
+                    <line x1="60" y1="66" x2="66" y2="86" stroke="#00f5ff" stroke-width="1.5" opacity="0.7"/>
+                    <!-- Paws -->
+                    <polygon points="30,86 34,84 38,86 34,90" fill="rgba(0,245,255,0.2)" stroke="#00f5ff" stroke-width="0.8"/>
+                    <polygon points="62,86 66,84 70,86 66,90" fill="rgba(0,245,255,0.2)" stroke="#00f5ff" stroke-width="0.8"/>
+                    <!-- Tail -->
+                    <path d="M 60 68 Q 80 72 82 58 Q 84 48 76 44" fill="none" stroke="#00f5ff" stroke-width="1.2" opacity="0.7"/>
+                    <!-- Chest marking -->
+                    <polygon points="50,50 54,56 50,60 46,56" fill="rgba(0,245,255,0.25)" stroke="#00f5ff" stroke-width="0.8"/>
+                    <!-- Whiskers -->
+                    <line x1="38" y1="33" x2="26" y2="30" stroke="#00f5ff" stroke-width="0.7" opacity="0.5"/>
+                    <line x1="38" y1="35" x2="26" y2="36" stroke="#00f5ff" stroke-width="0.7" opacity="0.5"/>
+                    <line x1="62" y1="33" x2="74" y2="30" stroke="#00f5ff" stroke-width="0.7" opacity="0.5"/>
+                    <line x1="62" y1="35" x2="74" y2="36" stroke="#00f5ff" stroke-width="0.7" opacity="0.5"/>
+                    <!-- Geometric pattern overlay -->
+                    <line x1="50" y1="42" x2="62" y2="50" stroke="#00f5ff" stroke-width="0.5" opacity="0.3"/>
+                    <line x1="50" y1="42" x2="38" y2="50" stroke="#00f5ff" stroke-width="0.5" opacity="0.3"/>
+                    <line x1="38" y1="50" x2="36" y2="64" stroke="#00f5ff" stroke-width="0.5" opacity="0.2"/>
+                    <line x1="62" y1="50" x2="64" y2="64" stroke="#00f5ff" stroke-width="0.5" opacity="0.2"/>
+                </svg>
+                <div class="logo-text">
+                    <h2>CHAITANYA</h2>
+                    <p>Neural Interface v2.0</p>
+                </div>
+            </div>
+            <div class="status-bar">
+                <div class="status-dot"></div>
+                <span class="status-text">System Online</span>
+            </div>
         </div>
+
         <button class="new-chat-btn" onclick="openNewChatModal()">
-            ➕ New Chat
+            ⬡ INITIALIZE NEW CHAT
         </button>
+
+        <div class="chat-list-label">Active Sessions</div>
+
         <div class="chat-list" id="chatList">
-            <div class="no-chats">No chats yet!<br>Click New Chat to start</div>
+            <div class="no-chats">NO ACTIVE SESSIONS<br>Initialize a chat to begin</div>
         </div>
     </div>
 
-    <!-- MAIN AREA -->
+    <!-- ===== MAIN AREA ===== -->
     <div class="main">
         <div class="chat-header">
-            <h3 id="currentChatName">Select a chat</h3>
-            <span id="currentChatMeta">No chat selected</span>
+            <div class="header-left">
+                <h3 id="currentChatName">// SELECT SESSION</h3>
+                <span id="currentChatMeta">No session active</span>
+            </div>
+            <div class="header-badge">
+                <div class="header-badge-dot"></div>
+                CRN · AI CORE
+            </div>
         </div>
 
         <div class="chat-box" id="chatBox">
             <div class="welcome" id="welcome">
-                <h2>🤖</h2>
-                <p>Create a new chat to start talking!</p>
+                <svg class="welcome-panther" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                    <polygon points="50,8 72,22 78,48 68,72 50,82 32,72 22,48 28,22" fill="none" stroke="#00f5ff" stroke-width="1" opacity="0.3"/>
+                    <polygon points="50,18 64,28 68,50 60,66 50,72 40,66 32,50 36,28" fill="rgba(0,245,255,0.06)" stroke="#00f5ff" stroke-width="1" opacity="0.6"/>
+                    <polygon points="50,12 62,20 62,36 50,42 38,36 38,20" fill="rgba(0,245,255,0.1)" stroke="#00f5ff" stroke-width="1.2"/>
+                    <polygon points="40,20 34,10 38,22" fill="rgba(0,245,255,0.15)" stroke="#00f5ff" stroke-width="1"/>
+                    <polygon points="60,20 66,10 62,22" fill="rgba(0,245,255,0.15)" stroke="#00f5ff" stroke-width="1"/>
+                    <polygon points="45,26 48,23 51,26 48,29" fill="#00f5ff" opacity="0.9"/>
+                    <polygon points="55,26 58,23 61,26 58,29" fill="#00f5ff" opacity="0.9"/>
+                    <polygon points="50,31 52,34 50,36 48,34" fill="#00f5ff" opacity="0.7"/>
+                    <polygon points="50,44 62,50 64,64 50,72 36,64 38,50" fill="rgba(0,245,255,0.06)" stroke="#00f5ff" stroke-width="1"/>
+                    <line x1="40" y1="66" x2="34" y2="86" stroke="#00f5ff" stroke-width="1.5" opacity="0.7"/>
+                    <line x1="60" y1="66" x2="66" y2="86" stroke="#00f5ff" stroke-width="1.5" opacity="0.7"/>
+                    <polygon points="30,86 34,84 38,86 34,90" fill="rgba(0,245,255,0.2)" stroke="#00f5ff" stroke-width="0.8"/>
+                    <polygon points="62,86 66,84 70,86 66,90" fill="rgba(0,245,255,0.2)" stroke="#00f5ff" stroke-width="0.8"/>
+                    <path d="M 60 68 Q 80 72 82 58 Q 84 48 76 44" fill="none" stroke="#00f5ff" stroke-width="1.2" opacity="0.7"/>
+                    <polygon points="50,50 54,56 50,60 46,56" fill="rgba(0,245,255,0.25)" stroke="#00f5ff" stroke-width="0.8"/>
+                    <line x1="38" y1="33" x2="26" y2="30" stroke="#00f5ff" stroke-width="0.7" opacity="0.5"/>
+                    <line x1="38" y1="35" x2="26" y2="36" stroke="#00f5ff" stroke-width="0.7" opacity="0.5"/>
+                    <line x1="62" y1="33" x2="74" y2="30" stroke="#00f5ff" stroke-width="0.7" opacity="0.5"/>
+                    <line x1="62" y1="35" x2="74" y2="36" stroke="#00f5ff" stroke-width="0.7" opacity="0.5"/>
+                </svg>
+                <h2>CHAITANYA AI</h2>
+                <div class="welcome-line"></div>
+                <p>Initialize a session to begin</p>
             </div>
         </div>
 
         <div class="input-area">
-            <input
-                type="text"
-                id="userInput"
-                placeholder="Select or create a chat first..."
-                onkeypress="handleKey(event)"
-                disabled
-            />
-            <button class="send-btn" id="sendBtn" onclick="sendMessage()" disabled>
-                Send ➤
+            <div class="input-wrapper">
+                <input
+                    type="text"
+                    id="userInput"
+                    placeholder="// Enter command or query..."
+                    onkeypress="handleKey(event)"
+                    disabled
+                />
+            </div>
+            <button class="send-btn" id="sendBtn" onclick="sendMessage()" disabled title="Send">
+                ⟶
             </button>
         </div>
     </div>
 
-    <!-- NEW CHAT MODAL -->
+    <!-- ===== NEW CHAT MODAL ===== -->
     <div class="modal-overlay" id="newChatModal">
         <div class="modal">
-            <h3>➕ New Chat</h3>
-            <input
-                type="text"
-                id="chatNameInput"
-                placeholder="Chat name (e.g. School Help)"
-                maxlength="30"
-            />
+            <h3>⬡ INIT NEW SESSION</h3>
+            <input type="text" id="chatNameInput" placeholder="Session name..." maxlength="30"/>
             <label class="modal-toggle">
-                <input
-                    type="checkbox"
-                    id="privateToggle"
-                    onchange="togglePrivateField()"
-                />
-                🔒 Make this chat private
+                <input type="checkbox" id="privateToggle" onchange="togglePrivateField()"/>
+                🔒 ENCRYPT SESSION (Private)
             </label>
             <div class="private-password-field" id="privatePasswordField">
-                <input
-                    type="password"
-                    id="chatPassword"
-                    placeholder="Set a password for this chat"
-                />
+                <input type="password" id="chatPassword" placeholder="Set access key..."/>
             </div>
-            <div class="error-text" id="newChatError">Please enter a chat name!</div>
+            <div class="error-text" id="newChatError">⚠ SESSION NAME REQUIRED</div>
             <div class="modal-buttons">
-                <button class="modal-btn btn-cancel" onclick="closeNewChatModal()">Cancel</button>
-                <button class="modal-btn btn-confirm" onclick="createNewChat()">Create Chat</button>
+                <button class="modal-btn btn-cancel" onclick="closeNewChatModal()">ABORT</button>
+                <button class="modal-btn btn-confirm" onclick="createNewChat()">INITIALIZE</button>
             </div>
         </div>
     </div>
 
-    <!-- PASSWORD MODAL -->
+    <!-- ===== PASSWORD MODAL ===== -->
     <div class="modal-overlay" id="passwordModal">
         <div class="modal">
-            <h3>🔒 Private Chat</h3>
-            <p style="color:#aaa; font-size:13px; margin-bottom:15px;">
-                This chat is password protected!
+            <h3>🔒 ENCRYPTED SESSION</h3>
+            <p style="color:#4a7a8a; font-size:12px; margin-bottom:16px; letter-spacing:1px;">
+                ACCESS KEY REQUIRED TO DECRYPT
             </p>
-            <input
-                type="password"
-                id="accessPassword"
-                placeholder="Enter password"
-                onkeypress="handlePasswordKey(event)"
-            />
-            <div class="error-text" id="passwordError">Wrong password! Try again.</div>
+            <input type="password" id="accessPassword" placeholder="Enter access key..." onkeypress="handlePasswordKey(event)"/>
+            <div class="error-text" id="passwordError">⚠ INVALID ACCESS KEY</div>
             <div class="modal-buttons">
-                <button class="modal-btn btn-cancel" onclick="closePasswordModal()">Cancel</button>
-                <button class="modal-btn btn-confirm" onclick="submitPassword()">Unlock 🔓</button>
+                <button class="modal-btn btn-cancel" onclick="closePasswordModal()">CANCEL</button>
+                <button class="modal-btn btn-confirm" onclick="submitPassword()">DECRYPT 🔓</button>
             </div>
         </div>
     </div>
 
-    <!-- DELETE MODAL -->
+    <!-- ===== DELETE MODAL ===== -->
     <div class="modal-overlay" id="deleteModal">
         <div class="modal">
-            <h3>🗑️ Delete Chat</h3>
-            <p style="color:#aaa; font-size:14px; margin-bottom:20px;">
-                Are you sure you want to delete this chat?<br>
-                <strong style="color:#ff4444;">This cannot be undone!</strong>
+            <h3>⚠ TERMINATE SESSION</h3>
+            <p style="color:#4a7a8a; font-size:13px; margin-bottom:20px; letter-spacing:1px; line-height:1.6;">
+                This session will be permanently deleted.<br>
+                <span style="color:#ff4444;">THIS ACTION CANNOT BE UNDONE.</span>
             </p>
             <div class="modal-buttons">
-                <button class="modal-btn btn-cancel" onclick="closeDeleteModal()">Cancel</button>
-                <button class="modal-btn" style="background:#ff4444; color:white; flex:1;"
-                    onclick="confirmDelete()">Delete 🗑️</button>
+                <button class="modal-btn btn-cancel" onclick="closeDeleteModal()">ABORT</button>
+                <button class="modal-btn" style="background:transparent; border:1px solid #ff4444; color:#ff4444; flex:1; font-family:'Orbitron',monospace; font-size:10px; letter-spacing:2px; cursor:pointer; transition:all 0.3s;" onmouseover="this.style.background='rgba(255,68,68,0.1)'" onmouseout="this.style.background='transparent'" onclick="confirmDelete()">TERMINATE</button>
             </div>
         </div>
     </div>
@@ -558,7 +1064,7 @@
             const chatList = document.getElementById("chatList");
 
             if (data.chats.length === 0) {
-                chatList.innerHTML = `<div class="no-chats">No chats yet!<br>Click New Chat to start</div>`;
+                chatList.innerHTML = `<div class="no-chats">NO ACTIVE SESSIONS<br>Initialize a chat to begin</div>`;
                 return;
             }
 
@@ -570,13 +1076,12 @@
                 div.innerHTML = `
                     <div class="chat-item-info" onclick="openChat('${chat.chat_id}', ${chat.private})">
                         <div class="chat-item-name">${chat.name}</div>
-                        <div class="chat-item-meta">${chat.message_count} messages • ${chat.created_at}</div>
+                        <div class="chat-item-meta">${chat.message_count} msg · ${chat.created_at}</div>
                     </div>
                     <div class="chat-item-icons">
                         ${chat.private ? '<span class="lock-icon">🔒</span>' : ''}
-                        <button class="delete-btn" onclick="openDeleteModal('${chat.chat_id}')">🗑️</button>
-                    </div>
-                `;
+                        <button class="delete-btn" onclick="openDeleteModal('${chat.chat_id}')">✕</button>
+                    </div>`;
                 chatList.appendChild(div);
             });
         }
@@ -613,12 +1118,7 @@
             const res = await fetch("/new_chat", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({
-                    user_id: userId,
-                    chat_name: name,
-                    private: isPrivate,
-                    password: password
-                })
+                body: JSON.stringify({ user_id: userId, chat_name: name, private: isPrivate, password: password })
             });
 
             const data = await res.json();
@@ -637,11 +1137,7 @@
             const res = await fetch("/access_chat", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({
-                    user_id: userId,
-                    chat_id: chatId,
-                    password: knownPassword
-                })
+                body: JSON.stringify({ user_id: userId, chat_id: chatId, password: knownPassword })
             });
 
             const data = await res.json();
@@ -652,11 +1148,11 @@
             }
 
             currentChatId = chatId;
-            document.getElementById("currentChatName").textContent = "🤖 " + data.name;
-            document.getElementById("currentChatMeta").textContent = "Chat active • Groq LLaMA3";
+            document.getElementById("currentChatName").textContent = "// " + data.name.toUpperCase();
+            document.getElementById("currentChatMeta").textContent = "Session active · CRN AI Core";
             document.getElementById("userInput").disabled = false;
             document.getElementById("sendBtn").disabled = false;
-            document.getElementById("userInput").placeholder = "Type your message...";
+            document.getElementById("userInput").placeholder = "// Enter your query...";
 
             const chatBox = document.getElementById("chatBox");
             chatBox.innerHTML = "";
@@ -664,8 +1160,30 @@
             if (data.messages.length === 0) {
                 chatBox.innerHTML = `
                     <div class="welcome" id="welcome">
-                        <h2>🤖</h2>
-                        <p>Start the conversation!</p>
+                        <svg class="welcome-panther" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                            <polygon points="50,8 72,22 78,48 68,72 50,82 32,72 22,48 28,22" fill="none" stroke="#00f5ff" stroke-width="1" opacity="0.3"/>
+                            <polygon points="50,18 64,28 68,50 60,66 50,72 40,66 32,50 36,28" fill="rgba(0,245,255,0.06)" stroke="#00f5ff" stroke-width="1" opacity="0.6"/>
+                            <polygon points="50,12 62,20 62,36 50,42 38,36 38,20" fill="rgba(0,245,255,0.1)" stroke="#00f5ff" stroke-width="1.2"/>
+                            <polygon points="40,20 34,10 38,22" fill="rgba(0,245,255,0.15)" stroke="#00f5ff" stroke-width="1"/>
+                            <polygon points="60,20 66,10 62,22" fill="rgba(0,245,255,0.15)" stroke="#00f5ff" stroke-width="1"/>
+                            <polygon points="45,26 48,23 51,26 48,29" fill="#00f5ff" opacity="0.9"/>
+                            <polygon points="55,26 58,23 61,26 58,29" fill="#00f5ff" opacity="0.9"/>
+                            <polygon points="50,31 52,34 50,36 48,34" fill="#00f5ff" opacity="0.7"/>
+                            <polygon points="50,44 62,50 64,64 50,72 36,64 38,50" fill="rgba(0,245,255,0.06)" stroke="#00f5ff" stroke-width="1"/>
+                            <line x1="40" y1="66" x2="34" y2="86" stroke="#00f5ff" stroke-width="1.5" opacity="0.7"/>
+                            <line x1="60" y1="66" x2="66" y2="86" stroke="#00f5ff" stroke-width="1.5" opacity="0.7"/>
+                            <polygon points="30,86 34,84 38,86 34,90" fill="rgba(0,245,255,0.2)" stroke="#00f5ff" stroke-width="0.8"/>
+                            <polygon points="62,86 66,84 70,86 66,90" fill="rgba(0,245,255,0.2)" stroke="#00f5ff" stroke-width="0.8"/>
+                            <path d="M 60 68 Q 80 72 82 58 Q 84 48 76 44" fill="none" stroke="#00f5ff" stroke-width="1.2" opacity="0.7"/>
+                            <polygon points="50,50 54,56 50,60 46,56" fill="rgba(0,245,255,0.25)" stroke="#00f5ff" stroke-width="0.8"/>
+                            <line x1="38" y1="33" x2="26" y2="30" stroke="#00f5ff" stroke-width="0.7" opacity="0.5"/>
+                            <line x1="38" y1="35" x2="26" y2="36" stroke="#00f5ff" stroke-width="0.7" opacity="0.5"/>
+                            <line x1="62" y1="33" x2="74" y2="30" stroke="#00f5ff" stroke-width="0.7" opacity="0.5"/>
+                            <line x1="62" y1="35" x2="74" y2="36" stroke="#00f5ff" stroke-width="0.7" opacity="0.5"/>
+                        </svg>
+                        <h2>READY</h2>
+                        <div class="welcome-line"></div>
+                        <p>Session initialized · Begin your query</p>
                     </div>`;
             } else {
                 data.messages.forEach(msg => {
@@ -699,11 +1217,7 @@
                 const res = await fetch("/chat", {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({
-                        user_id: userId,
-                        chat_id: currentChatId,
-                        message: message
-                    })
+                    body: JSON.stringify({ user_id: userId, chat_id: currentChatId, message: message })
                 });
 
                 const data = await res.json();
@@ -713,7 +1227,7 @@
 
             } catch (err) {
                 removeTyping();
-                addMessage("Sorry something went wrong! Please try again.", false);
+                addMessage("⚠ CONNECTION ERROR — Please try again.", false);
             }
 
             document.getElementById("sendBtn").disabled = false;
@@ -733,7 +1247,7 @@
                 div.textContent = text;
             } else {
                 div.classList.add("bot-message");
-                div.innerHTML = `<div class="name">🤖 AI Chatbot</div>${marked.parse(text)}`;
+                div.innerHTML = `<div class="name">CHAITANYA AI</div>${marked.parse(text)}`;
             }
 
             if (!animate) div.style.animation = "none";
@@ -746,7 +1260,7 @@
             const div = document.createElement("div");
             div.classList.add("typing");
             div.id = "typing";
-            div.innerHTML = `<span></span><span></span><span></span>`;
+            div.innerHTML = `<span class="typing-label">PROCESSING</span><span></span><span></span><span></span>`;
             chatBox.appendChild(div);
             chatBox.scrollTop = chatBox.scrollHeight;
         }
@@ -772,23 +1286,38 @@
             await fetch("/delete_chat", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({
-                    user_id: userId,
-                    chat_id: chatToDelete
-                })
+                body: JSON.stringify({ user_id: userId, chat_id: chatToDelete })
             });
 
             if (currentChatId === chatToDelete) {
                 currentChatId = null;
-                document.getElementById("currentChatName").textContent = "Select a chat";
-                document.getElementById("currentChatMeta").textContent = "No chat selected";
+                document.getElementById("currentChatName").textContent = "// SELECT SESSION";
+                document.getElementById("currentChatMeta").textContent = "No session active";
                 document.getElementById("userInput").disabled = true;
                 document.getElementById("sendBtn").disabled = true;
-                document.getElementById("userInput").placeholder = "Select or create a chat first...";
+                document.getElementById("userInput").placeholder = "// Enter command or query...";
                 document.getElementById("chatBox").innerHTML = `
                     <div class="welcome" id="welcome">
-                        <h2>🤖</h2>
-                        <p>Create a new chat to start talking!</p>
+                        <svg class="welcome-panther" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                            <polygon points="50,8 72,22 78,48 68,72 50,82 32,72 22,48 28,22" fill="none" stroke="#00f5ff" stroke-width="1" opacity="0.3"/>
+                            <polygon points="50,18 64,28 68,50 60,66 50,72 40,66 32,50 36,28" fill="rgba(0,245,255,0.06)" stroke="#00f5ff" stroke-width="1"/>
+                            <polygon points="50,12 62,20 62,36 50,42 38,36 38,20" fill="rgba(0,245,255,0.1)" stroke="#00f5ff" stroke-width="1.2"/>
+                            <polygon points="40,20 34,10 38,22" fill="rgba(0,245,255,0.15)" stroke="#00f5ff" stroke-width="1"/>
+                            <polygon points="60,20 66,10 62,22" fill="rgba(0,245,255,0.15)" stroke="#00f5ff" stroke-width="1"/>
+                            <polygon points="45,26 48,23 51,26 48,29" fill="#00f5ff" opacity="0.9"/>
+                            <polygon points="55,26 58,23 61,26 58,29" fill="#00f5ff" opacity="0.9"/>
+                            <polygon points="50,31 52,34 50,36 48,34" fill="#00f5ff" opacity="0.7"/>
+                            <polygon points="50,44 62,50 64,64 50,72 36,64 38,50" fill="rgba(0,245,255,0.06)" stroke="#00f5ff" stroke-width="1"/>
+                            <line x1="40" y1="66" x2="34" y2="86" stroke="#00f5ff" stroke-width="1.5" opacity="0.7"/>
+                            <line x1="60" y1="66" x2="66" y2="86" stroke="#00f5ff" stroke-width="1.5" opacity="0.7"/>
+                            <polygon points="30,86 34,84 38,86 34,90" fill="rgba(0,245,255,0.2)" stroke="#00f5ff" stroke-width="0.8"/>
+                            <polygon points="62,86 66,84 70,86 66,90" fill="rgba(0,245,255,0.2)" stroke="#00f5ff" stroke-width="0.8"/>
+                            <path d="M 60 68 Q 80 72 82 58 Q 84 48 76 44" fill="none" stroke="#00f5ff" stroke-width="1.2" opacity="0.7"/>
+                            <polygon points="50,50 54,56 50,60 46,56" fill="rgba(0,245,255,0.25)" stroke="#00f5ff" stroke-width="0.8"/>
+                        </svg>
+                        <h2>CHAITANYA AI</h2>
+                        <div class="welcome-line"></div>
+                        <p>Initialize a session to begin</p>
                     </div>`;
             }
 
@@ -819,11 +1348,7 @@
             const res = await fetch("/access_chat", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({
-                    user_id: userId,
-                    chat_id: pendingAccessChatId,
-                    password: password
-                })
+                body: JSON.stringify({ user_id: userId, chat_id: pendingAccessChatId, password: password })
             });
 
             const data = await res.json();
